@@ -1,26 +1,78 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <main>
+    <div class="search">
+      <input type="text" v-model="search">
+    </div>
+    <NewsList v-bind:news="filterNews"/>
+  </main>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import NewsList from '@/components/NewsList'
+
+
 
 export default {
   name: 'App',
+  data(){
+    return {
+      news: [
+        {title: 'Срочная новость!', info: 'Сосу жопу'},
+        {title: '12 апреля день Космонавтики', info: 'Запустят салюты'},
+        {title: 'ЧП на станции Кунцево', info: 'Очевидцы рассказаывают о бомбе'},
+        {title: 'Комета пролетит', info: 'Говорят, что сегодня она пролетит'},
+      ],
+      search: "",
+    }
+  },
   components: {
-    HelloWorld
+    NewsList
+  },
+  computed: {
+    filterNews() {
+      var newsArray = this.news,
+      searchString = this.search;
+
+      if(!searchString) {
+        return newsArray;
+      }
+
+      searchString = searchString.trim().toLowerCase();
+
+      newsArray = newsArray.filter(function(item){
+        if(item.title.toLowerCase().indexOf(searchString) !== -1){
+          return item;
+        }
+      })
+      return newsArray;
+    } 
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  *{
+    box-sizing: border-box;
+    margin: 0;
+  }
+  body {
+    background-color: #ebebeb;
+    font-family: sans-serif;
+  }
+  .search{
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+    background-color: #2fffff;
+  }
+  .search input {
+    padding: 15px;
+    width: 500px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    font-weight: bold;
+
+  }
 </style>
